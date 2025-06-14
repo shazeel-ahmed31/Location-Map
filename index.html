@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Location</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .map-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+        }
+        
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .contact-card {
+            transition: transform 0.2s ease-in-out;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .icon-circle {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .landmark-card {
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .landmark-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-card {
+            transition: all 0.5s ease-in-out;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .dot-active {
+            transform: scale(1.25);
+        }
+        
+        .thumbnail-active {
+            background-color: rgb(59 130 246 / 0.1);
+            ring-width: 2px;
+            ring-color: rgb(59 130 246);
+        }
+        
+        .nav-button {
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .nav-button:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <section class="w-full py-12 md:py-24 lg:py-32 bg-gray-50">
+        <div class="container mx-auto px-4 md:px-6">
+            <!-- Header -->
+            <div class="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+                <div class="space-y-2">
+                    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl text-gray-900">
+                        Visit Our Office
+                    </h2>
+                    <p class="max-w-3xl text-gray-600 md:text-xl">
+                        Located in the heart of Islamabad, we're easily accessible and ready to serve you.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <!-- Map Section -->
+                <div class="relative">
+                    <div class="overflow-hidden border-0 shadow-lg rounded-lg bg-white">
+                        <div class="relative h-96 lg:h-[500px] map-container">
+                            <!-- Loading Skeleton -->
+                            <div id="map-loading" class="absolute inset-0 bg-gray-200 loading-skeleton flex items-center justify-center">
+                                <div class="text-gray-500">Loading map...</div>
+                            </div>
+                            
+                            <!-- Google Maps Embed -->
+                            <iframe
+                                id="google-map"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3321.0234567890123!2d73.0931!3d33.7294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dfbfd07891722f%3A0x6059515c3bdb02b4!2sF-7%20Markaz%2C%20Islamabad%2C%20Islamabad%20Capital%20Territory%2C%20Pakistan!5e0!3m2!1sen!2s!4v1234567890123!5m2!1sen!2s"
+                                width="100%"
+                                height="100%"
+                                style="border:0;"
+                                allowfullscreen=""
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"
+                                class="rounded-lg"
+                                onload="hideMapLoading()">
+                            </iframe>
+                        </div>
+                    </div>
+
+                    <!-- Map Controls -->
+                    <div class="absolute top-4 right-4 flex flex-col gap-2">
+                        <button
+                            onclick="openInGoogleMaps()"
+                            class="px-3 py-2 text-sm bg-white/90 backdrop-blur-sm shadow-lg hover:bg-white rounded-md flex items-center transition-all duration-200">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                            </svg>
+                            Open in Maps
+                        </button>
+                        <button
+                            onclick="openDirections()"
+                            class="px-3 py-2 text-sm bg-white/90 backdrop-blur-sm shadow-lg hover:bg-white rounded-md flex items-center transition-all duration-200">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                            </svg>
+                            Get Directions
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="space-y-6">
+                    <div class="border-0 shadow-lg rounded-lg bg-white contact-card">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-6">Contact Information</h3>
+                            
+                            <div class="space-y-6">
+                                <!-- Address -->
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex items-center justify-center w-12 h-12 rounded-full icon-circle flex-shrink-0">
+                                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg mb-1">Address</h4>
+                                        <p class="text-gray-600">F-7 Markaz, Islamabad, Pakistan</p>
+                                    </div>
+                                </div>
+
+                                <!-- Phone -->
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex items-center justify-center w-12 h-12 rounded-full icon-circle flex-shrink-0">
+                                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg mb-1">Phone</h4>
+                                        <a href="tel:+925112345678" class="text-gray-600 hover:text-blue-600 transition-colors">
+                                            +92 314 327 4325
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex items-center justify-center w-12 h-12 rounded-full icon-circle flex-shrink-0">
+                                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg mb-1">Email</h4>
+                                        <a href="mailto:contact@company.com" class="text-gray-600 hover:text-blue-600 transition-colors">
+                                            shazeelahmed300@gmail.com
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Hours -->
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex items-center justify-center w-12 h-12 rounded-full icon-circle flex-shrink-0">
+                                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <polyline points="12,6 12,12 16,14"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg mb-1">Business Hours</h4>
+                                        <div class="text-gray-600 space-y-1">
+                                            <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                                            <p>Saturday: 10:00 AM - 4:00 PM</p>
+                                            <p>Sunday: Closed</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button 
+                            onclick="openDirections()"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-md flex items-center justify-center transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                            </svg>
+                            Get Directions
+                        </button>
+                        <button 
+                            onclick="window.open('tel:+925112345678')"
+                            class="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-md flex items-center justify-center transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                            </svg>
+                            Call Now
+                        </button>
+                    </div>
+
+                    <!-- Additional Info Card -->
+                    <div class="border-0 shadow-lg rounded-lg bg-blue-50 contact-card">
+                        <div class="p-6">
+                            <h4 class="font-semibold text-lg mb-3">Why Visit Us?</h4>
+                            <ul class="space-y-2 text-gray-600">
+                                <li class="flex items-center">
+                                    <div class="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
+                                    Free parking available
+                                </li>
+                                <li class="flex items-center">
+                                    <div class="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
+                                    Wheelchair accessible
+                                </li>
+                                <li class="flex items-center">
+                                    <div class="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
+                                    Public transport nearby
+                                </li>
+                                <li class="flex items-center">
+                                    <div class="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
+                                    Coffee and refreshments
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nearby Landmarks -->
+            <div class="mt-12 max-w-4xl mx-auto">
+                <div class="border-0 shadow-lg rounded-lg bg-white">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-4">Nearby Landmarks</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="text-center p-4 rounded-lg bg-gray-50 landmark-card">
+                                <h4 class="font-semibold mb-2">Centaurus Mall</h4>
+                                <p class="text-sm text-gray-600">5 minutes drive</p>
+                            </div>
+                            <div class="text-center p-4 rounded-lg bg-gray-50 landmark-card">
+                                <h4 class="font-semibold mb-2">Pakistan Monument</h4>
+                                <p class="text-sm text-gray-600">10 minutes drive</p>
+                            </div>
+                            <div class="text-center p-4 rounded-lg bg-gray-50 landmark-card">
+                                <h4 class="font-semibold mb-2">Faisal Mosque</h4>
+                                <p class="text-sm text-gray-600">15 minutes drive</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const locationData = {
+            coordinates: "33.7294,73.0931",
+            phone: "+92 51 123 4567",
+            email: "contact@company.com"
+        };
+
+        function hideMapLoading() {
+            const loadingElement = document.getElementById('map-loading');
+            if (loadingElement) {
+                loadingElement.style.display = 'none';
+            }
+        }
+
+        function openInGoogleMaps() {
+            const url = `https://www.google.com/maps/search/?api=1&query=${locationData.coordinates}`;
+            window.open(url, '_blank');
+        }
+
+        function openDirections() {
+            const url = `https://www.google.com/maps/dir/?api=1&destination=${locationData.coordinates}`;
+            window.open(url, '_blank');
+        }
+
+        // Add smooth scrolling for better UX
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add loading animation
+            setTimeout(() => {
+                hideMapLoading();
+            }, 2000);
+
+            // Add intersection observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe contact cards
+            document.querySelectorAll('.contact-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
