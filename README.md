@@ -1,2 +1,2 @@
 # Location-Map
-This project is a responsive location/map guide section built using HTML, CSS, and primarily TypeScript and JavaScript.
+This project is a responsive location/map guide section built using HTML, CSS, and primarily TypeScript and JavaScript. It features an interactive map interface with clickable markers, dynamic location details, and responsive styling for different screen sizes. The code is modular and structured for easy integration into existing web applications. TypeScript is used to ensure maintainable and type-safe logic, while optional API support (e.g., Google Maps or Leaflet) can enhance functionality. Ideal for websites needing location-based sections like contact pages, event guides, or store locators.
