@@ -1,0 +1,4 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {mapLinks,phoneHref,emailHref} from '../lib/location.ts';
+test('navigation and iframe URLs use the same configured point',()=>{const links=mapLinks(33.7,73.1);for(const key of ['search','directions','embed'])assert.ok(decodeURIComponent(links[key]).includes('33.7,73.1'));assert.ok(links.embed.includes('openstreetmap.org'));});
+test('coordinates reject invalid ranges and NaN',()=>{for(const pair of [[91,0],[0,181],[NaN,0],[0,Infinity]])assert.throws(()=>mapLinks(...pair));assert.ok(mapLinks(-90,-180));});
+test('contact links reject malformed values and normalize phone spacing',()=>{assert.equal(phoneHref('+92 51 123 4567'),'tel:+92511234567');assert.equal(phoneHref('javascript:alert(1)'),undefined);assert.equal(emailHref('contact@example.com'),'mailto:contact@example.com');assert.equal(emailHref('bad@example.com?subject=inject'),undefined);});
